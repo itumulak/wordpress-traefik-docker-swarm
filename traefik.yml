@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:1.7.12
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: ./traefik.toml
+        target: /traefik.toml
+      - type: bind
+        source: ./acme.json
+        target: /acme.json
+    ports:
+      - 80:80
+#      - 8080:8080 # Dashboard. @todo cannot resolve connection if SSL is used.
+      - 443:443 # Uncomment to expose and enable SSL
+    deploy:
+      restart_policy:
+        condition: on-failure
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==manager
+    # For DNS Challenge
+    # Check providers for DNS verifications.
+#    environment:
+#      DO_AUTH_TOKEN: DIGITALOCEAN_KEY
+    networks:
+      - wp
+
+networks:
+  wp:
+    driver: overlay
+    external: true

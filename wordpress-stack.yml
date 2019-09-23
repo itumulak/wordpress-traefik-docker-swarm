@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    networks:
+      - wp
+
+  wordpress:
+    image: wordpress:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
+      placement:
+        constraints:
+          - node.role==worker
+      mode: replicated
+      replicas: 1 # Scale as needed
+      labels:
+        - "traefik.port=80"
+        - "traefik.weight=10"
+        - "traefik.frontend.rule=PathPrefixStrip:/;"
+        - "traefik.docker.network=wp"
+        - "traefik.frontend.entryPoints=https"
+        - "traefik.enable=true"
+        - "traefik.passHostHeader=true"
+        - "traefik.backend=wordpress"
+        - "traefik.backend.loadbalancer.method=drr"
+        - "traefik.backend.loadbalancer.stickiness=true"
+        - "traefik.backend.loadbalancer.stickiness.cookieName=wp-monster"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    networks:
+      - wp
+
+networks:
+  wp:
+    driver: overlay
+    external: true
+
+volumes:
+  db_data:
