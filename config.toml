@@ -21,7 +21,7 @@ network = "wp"
 swarmModeRefreshSeconds = 5
 
 [api]
-dashboard = true
+dashboard = false
 entrypoint = "dashboard"
 
 [acme]
