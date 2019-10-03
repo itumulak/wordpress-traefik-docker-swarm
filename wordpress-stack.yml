@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   db:
-    image: mysql:5.7
+    image: mysql:${MYSQL_VERSION}
     volumes:
       - db_data:/var/lib/mysql
     deploy:
@@ -12,22 +12,22 @@ services:
         constraints:
           - node.role==manager
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - wp
 
   wordpress:
-    image: wordpress:latest
+    image: wordpress:${WORDPRESS_VERSION}
     deploy:
       restart_policy:
         condition: on-failure
         max_attempts: 10
       placement:
         constraints:
-          - node.role==worker
+          - node.role==${WORDPRESS_CONTRAINTS}
       mode: replicated
       replicas: 1 # Scale as needed
       labels:
@@ -44,8 +44,10 @@ services:
         - "traefik.backend.loadbalancer.stickiness.cookieName=wp-monster"
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
     networks:
       - wp
 
