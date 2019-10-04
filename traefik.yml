@@ -26,6 +26,7 @@ services:
         constraints:
           - node.role==manager
     # For DNS Challenge
+    # Uncomment this section if you are opting for a DNS Challenge
     # Check providers for DNS verifications.
 #    environment:
 #      DO_AUTH_TOKEN: DIGITALOCEAN_KEY
