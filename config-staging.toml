@@ -1,0 +1,44 @@
+logLevel = "DEBUG"
+defaultEntryPoints = ["http", "https"]
+
+[entryPoints]
+    [entryPoints.http]
+    address = ":80"
+        [entryPoints.http.redirect]
+        entryPoint = "https"
+    [entryPoints.https]
+    address = ":443"
+        [entryPoints.https.tls]
+    [entryPoints.dashboard]
+    address = ":8080"
+
+[docker]
+endpoint = "unix://var/run/docker.sock"
+watch = true
+swarmMode = false
+exposedByDefault = false
+swarmModeRefreshSeconds = 5
+#network = "wp"
+domain = "docker.localhost"
+
+[api]
+dashboard = false
+entrypoint = "dashboard"
+
+[acme]
+email = "test@mail.com"
+storageFile = "acme.json"
+entryPoint = "https"
+acmeLogging = true
+onHostRule = true
+caServer = "https://acme-staging-v02.api.letsencrypt.org/directory" # Uncomment/remove if deployed in production
+
+[acme.httpChallenge]
+entryPoint = "http"
+
+#[acme.dnsChallenge]
+#provider = "digitalocean"
+#resolvers = ["1.1.1.1:53", "8.8.8.8:53"]
+
+[[acme.domains]]
+main = "*.docker.localhost"

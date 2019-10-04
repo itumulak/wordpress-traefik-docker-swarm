@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:1.7.12
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: ./config-staging.toml
+        target: /traefik.toml
+      - type: bind
+        source: ./acme.json
+        target: /acme.json
+    ports:
+      - 80:80
+      - 8080:8080
+      - 443:443
+    networks:
+      - wp
+
+  db:
+    image: mysql:${MYSQL_VERSION:-5.7}
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MYSQL_USER: ${MYSQL_USER:-wordpress}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
+    networks:
+      - wp
+
+  wordpress:
+    image: wordpress:${WORDPRESS_VERSION:-latest}
+    labels:
+      - "traefik.port=80"
+      - "traefik.weight=10"
+#      - "traefik.frontend.rule=PathPrefixStrip:/;"
+#      - "traefik.docker.network=wp"
+      - "traefik.frontend.rule=Host:wordpress.docker.localhost"
+      - "traefik.frontend.entryPoints=https"
+      - "traefik.enable=true"
+#      - "traefik.passHostHeader=true"
+      - "traefik.backend=wordpress"
+#      - "traefik.backend.loadbalancer.method=drr"
+#      - "traefik.backend.loadbalancer.stickiness=true"
+#      - "traefik.backend.loadbalancer.stickiness.cookieName=wp-monster"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-wordpress}
+      WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
+    networks:
+      - wp
+
+networks:
+  wp:
+    driver: bridge
+
+volumes:
+  db_data:

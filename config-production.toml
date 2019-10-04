@@ -17,20 +17,20 @@ endpoint = "unix://var/run/docker.sock"
 watch = true
 swarmMode = true
 exposedByDefault = false
-network = "wp"
 swarmModeRefreshSeconds = 5
+network = "wp"
 
 [api]
 dashboard = false
 entrypoint = "dashboard"
 
 [acme]
-email = "YOUR_EMAIL"
+email = "YOUR-EMAIL@MAIL"
 storageFile = "acme.json"
 entryPoint = "https"
 acmeLogging = true
 onHostRule = true
-caServer = "https://acme-staging-v02.api.letsencrypt.org/directory" # Uncomment/remove if deployed in production
+#caServer = "https://acme-staging-v02.api.letsencrypt.org/directory" # Uncomment/remove if deployed in production
 
 [acme.httpChallenge]
 entryPoint = "http"
@@ -40,4 +40,4 @@ entryPoint = "http"
 #resolvers = ["1.1.1.1:53", "8.8.8.8:53"]
 
 [[acme.domains]]
-main = "MAIN_DOMAIN"
+main = "*.YOUR_DOMAIN.HERE"
