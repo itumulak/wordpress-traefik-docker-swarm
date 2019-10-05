@@ -4,6 +4,10 @@ services:
   db:
     image: mysql:${MYSQL_VERSION:-5.7}
     volumes:
+      # During fresh instance, if you are provided with a backup database you can import it.
+      # Create a db folder `mkdir db`, put the backup there.
+      # Uncomment the line below and it will execute files with extensions .sh, .sql and .sql.gz.
+#      - ./db:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
