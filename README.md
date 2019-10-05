@@ -42,4 +42,4 @@ docker stack deploy --compose-file wordpress-stack.yml myapp
 
 On hindsight, the seperation of Traefik container from the WordPress stack is because we don't want Traefik to go offline if you are updating the stack in the future to come. 
 
-Keep in mind, for DNS challenge you need to add additional environment variable. For more details and instruction, check [Traefik ACME (Let's Encrypt) Configuration](https://docs.traefik.io/v1.7/configuration/acme/).
+Keep in mind, for DNS challenge you need to add additional environment variable. For more details and instruction, check [Traefik ACME (Let's Encrypt) Configuration](https://docs.traefik.io/v1.7/configuration/acme/#dnschallenge).
