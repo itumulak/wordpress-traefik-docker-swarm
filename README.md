@@ -1,5 +1,5 @@
 # wordpress-traefik-docker-swarm
-This template project lets you deploy WordPress enviroment both in local or production. Utilizing Docker for container orchestration, then Traefek v1.7 for SSL (self-signed), load balancing, and reverse proxy.
+This template project lets you deploy WordPress enviroment both in local or production. Utilizing Docker for container orchestration, then Traefik v1.7 for SSL (self-signed), load balancing, and reverse proxy.
 
 ## Usage
 
@@ -18,7 +18,7 @@ Alternatively, you can can use `openssl` command:
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
 ```
 However, this method requires extra step in order for the SSL to work properly in your browser. A well detailed instruction is provided [here](https://stackoverflow.com/questions/21488845/how-can-i-generate-a-self-signed-certificate-with-subjectaltname-using-openssl/21494483#21494483). 
-Keep in mind, generating the certificates is a **one time process only** since website will be hosted in subdomain. Depending on your needs and structure, you can still opt to generate as many certificates as you want, just replace the default domain (docker.localhost) in `docker-compose.yml` and `config-staging.toml`. Replace the new 2 named `.pem` files in the `config-staging.toml`.
+Keep in mind, generating the certificates is a **one time process only** since website will be hosted in subdomain. Depending on your needs and structure, you can still opt to generate as many certificates as you want, just replace the default domain (docker.localhost) in `docker-compose.yml` and `config-staging.toml`. Replace the new 2 named `.pem` files in the `config-staging.toml` as well.
 
 Run `traefik-compose.yml` first:
 ```
