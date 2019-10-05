@@ -1,31 +1,6 @@
 version: '3.7'
 
 services:
-  traefik:
-    image: traefik:1.7.12
-    volumes:
-      - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
-      - type: bind
-        source: ./config-staging.toml
-        target: /traefik.toml
-      - type: bind
-        source: ./acme.json
-        target: /acme.json
-      - type: bind
-        source: ./certs/server.crt
-        target: /sslcerts/server.crt
-      - type: bind
-        source: ./certs/server.key
-        target: /sslcerts/server.key
-    ports:
-      - 80:80
-      - 8080:8080
-      - 443:443
-    networks:
-      - wp
-
   db:
     image: mysql:${MYSQL_VERSION:-5.7}
     volumes:
@@ -43,16 +18,10 @@ services:
     labels:
       - "traefik.port=80"
       - "traefik.weight=10"
-#      - "traefik.frontend.rule=PathPrefixStrip:/;"
-#      - "traefik.docker.network=wp"
-      - "traefik.frontend.rule=Host:wordpress.docker.localhost"
+      - "traefik.frontend.rule=Host:wordpress.docker.localhost" # Modify sub-domain with your project or preferred name
       - "traefik.frontend.entryPoints=https"
       - "traefik.enable=true"
-#      - "traefik.passHostHeader=true"
       - "traefik.backend=wordpress"
-#      - "traefik.backend.loadbalancer.method=drr"
-#      - "traefik.backend.loadbalancer.stickiness=true"
-#      - "traefik.backend.loadbalancer.stickiness.cookieName=wp-monster"
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-wordpress}

@@ -15,8 +15,7 @@ services:
         target: /acme.json
     ports:
       - 80:80
-#      - 8080:8080 # Dashboard. @todo cannot resolve connection if SSL is used.
-      - 443:443 # Uncomment to expose and enable SSL
+      - 443:443
     deploy:
       restart_policy:
         condition: on-failure

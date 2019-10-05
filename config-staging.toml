@@ -10,8 +10,8 @@ defaultEntryPoints = ["http", "https"]
     address = ":443"
         [entryPoints.https.tls]
             [[entryPoints.https.tls.certificates]]
-            certFile = "/sslcerts/server.crt"
-            keyFile = "/sslcerts/server.key"
+            certFile = "/sslcerts/docker.localhost+1.pem" # Replace file name a needed
+            keyFile = "/sslcerts/docker.localhost+1-key.pem" # Replace file name a needed
     [entryPoints.dashboard]
     address = ":8080"
 
@@ -25,7 +25,7 @@ swarmModeRefreshSeconds = 5
 domain = "docker.localhost"
 
 [api]
-dashboard = false
+dashboard = true
 entrypoint = "dashboard"
 
 [acme]
@@ -38,10 +38,6 @@ caServer = "https://acme-staging-v02.api.letsencrypt.org/directory" # Uncomment/
 
 [acme.httpChallenge]
 entryPoint = "http"
-
-#[acme.dnsChallenge]
-#provider = "digitalocean"
-#resolvers = ["1.1.1.1:53", "8.8.8.8:53"]
 
 [[acme.domains]]
 main = "*.docker.localhost"

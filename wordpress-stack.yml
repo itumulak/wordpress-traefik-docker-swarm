@@ -27,7 +27,7 @@ services:
         max_attempts: 10
       placement:
         constraints:
-          - node.role==${WORDPRESS_CONTRAINTS}
+          - node.role==manager
       mode: replicated
       replicas: 1 # Scale as needed
       labels:
