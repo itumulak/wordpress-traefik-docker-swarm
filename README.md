@@ -11,7 +11,7 @@ First step is to generate self-signed certificates. The easiest method is to use
 ```
 mkdir certs && cd $_ && mkcert docker.localhost "*.docker.localhost" && cd ..
 ```
-There will be two `.pem` files generated. This will be used by traefik.
+There will be two `.pem` files generated stored in `certs` folder. This will be used by traefik.
 
 Alternatively, you can can use `openssl` command:
 ```
@@ -34,7 +34,7 @@ Run `traefik-stack.yml` first:
 ```
 docker stack deploy --compose-file traefik-compose.yml  myapp
 ```
-Check `config-production.yml` and uncomment line 33 if the site is still on staging. Getting or renewing ACME certificates is done through HTTP Challenge. Uncomment line 38-40 if you want to opt for DNS challenge.
+Check `config-production.toml` and uncomment line 33 if the site is still on staging. Getting or renewing ACME certificates is done through HTTP Challenge. Uncomment line 38-40 if you want to opt for DNS challenge.
 Modify  `wordpress-stack.yml` configs as needed and then run:
 ```
 docker stack deploy --compose-file wordpress-stack.yml myapp
