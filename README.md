@@ -7,7 +7,7 @@ This template project lets you deploy WordPress enviroment both in local or prod
 Check the `.env` file and modify the values as needed.
 
 ### For local development
-First step is to generate self-signed certificates. The easiest method is to use **`mkcert`** command. Check [instructions on how to install **`mkcert`**](https://github.com/FiloSottile/mkcert).
+First step is to generate self-signed certificates. The easiest method is to use **`mkcert`** command. Check [instructions on how to install **`mkcert`**](https://github.com/FiloSottile/mkcert#installation).
 ```
 mkdir certs && cd $_ && mkcert docker.localhost "*.docker.localhost" && cd ..
 ```
