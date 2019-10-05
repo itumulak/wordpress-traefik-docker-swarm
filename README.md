@@ -1,5 +1,5 @@
 # wordpress-traefik-docker-swarm
-This template project lets you deploy WordPress enviroment both in local or production. Utilizing Docker for container orchestration, then Traefik v1.7 for SSL (self-signed), load balancing, and reverse proxy.
+This template project lets you deploy WordPress enviroment both in local and production. Utilizing Docker for container orchestration, then Traefik v1.7 for SSL (self-signed), load balancing, and reverse proxy.
 
 ## Usage
 
