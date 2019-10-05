@@ -34,7 +34,7 @@ Run `traefik-stack.yml` first:
 ```
 docker stack deploy --compose-file traefik-compose.yml  myapp
 ```
-Check `config-production.toml` and uncomment line 33 if the site is still on staging. Getting or renewing ACME certificates is done through HTTP Challenge. Uncomment line 38-40 if you want to opt for DNS challenge.
+Check `config-production.toml`, supply your email on line 28 and uncomment line 33 if the site is still on staging. Getting or renewing ACME certificates is done through HTTP Challenge. Uncomment line 38-40 if you want to opt for DNS challenge.
 Modify  `wordpress-stack.yml` configs as needed and then run:
 ```
 docker stack deploy --compose-file wordpress-stack.yml myapp
