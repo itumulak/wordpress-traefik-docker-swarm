@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   db:
-    image: mysql:${MYSQL_VERSION}
+    image: mysql:${MYSQL_VERSION:-5.7}
     volumes:
       - db_data:/var/lib/mysql
     deploy:
@@ -20,14 +20,14 @@ services:
       - wp
 
   wordpress:
-    image: wordpress:${WORDPRESS_VERSION:-latest}
+    image: wordpress:${WORDPRESS_VERSION:-latest} # can you place this if you want to use you own custom wp image
     deploy:
       restart_policy:
         condition: on-failure
         max_attempts: 10
       placement:
         constraints:
-          - node.role==manager
+          - node.role==manager # Change its role to worker if required
       mode: replicated
       replicas: 1 # Scale as needed
       labels:
@@ -48,6 +48,9 @@ services:
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-wordpress}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
+      # Add extra environments for DNS Challenge.
+      # DigitalOcean DNS Challenge sample.
+#      DO_AUTH_TOKEN: 'ADD_ACCESS_TOKEN_HERE'
     networks:
       - wp
 
