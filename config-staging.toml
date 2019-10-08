@@ -10,8 +10,8 @@ defaultEntryPoints = ["http", "https"]
     address = ":443"
         [entryPoints.https.tls]
             [[entryPoints.https.tls.certificates]]
-            certFile = "/sslcerts/wordpress.localhost+1.pem" # Replace file name as needed
-            keyFile = "/sslcerts/wordpress.localhost+1-key.pem" # Replace file name as needed
+            certFile = "/sslcerts/docker.localhost+1.pem" # Replace file name as needed
+            keyFile = "/sslcerts/docker.localhost+1-key.pem" # Replace file name as needed
     [entryPoints.dashboard]
     address = ":8080"
 

@@ -1,27 +1,6 @@
 version: '3.7'
 
 services:
-  traefik:
-    image: traefik:1.7.12
-    volumes:
-      - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
-      - type: bind
-        source: ./config-staging.toml
-        target: /traefik.toml
-      - type: bind
-        source: ./certs
-        target: /sslcerts
-    ports:
-      - 80:80
-      - 443:443
-    labels:
-      - "traefik.port=8080"
-      - "traefik.frontend.entryPoints=https"
-      - "traefik.frontend.rule=Host:traefik.wordpress.localhost"
-      - "traefik.enable=true"
-
   db:
     image: mysql:${MYSQL_VERSION:-5.7}
     volumes:
@@ -29,12 +8,14 @@ services:
       # Create a db folder `mkdir db`, put the backup there.
       # Uncomment the line below and it will execute files with extensions .sh, .sql and .sql.gz.
 #      - ./db:/docker-entrypoint-initdb.d
-      - db_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${WP_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: ${WP_DB_NAME:-wordpress}
       MYSQL_USER: ${WP_DB_USER:-wordpress}
       MYSQL_PASSWORD: ${WP_DB_PASSWORD:-wordpress}
+    networks:
+      - wp
 
   wordpress:
     image: wordpress:${WP_VERSION:-latest}
@@ -42,7 +23,7 @@ services:
       - ./wp-content:/var/www/html/wp-content
     labels:
       - "traefik.port=80"
-      - "traefik.frontend.rule=Host:wordpress.localhost" # Modify sub-domain with your project or preferred name
+      - "traefik.frontend.rule=Host:wordpress.docker.localhost" # Modify sub-domain with your project or preferred name
       - "traefik.frontend.entryPoints=https"
       - "traefik.enable=true"
     environment:
@@ -51,6 +32,11 @@ services:
       WORDPRESS_DB_USER: ${WP_DB_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD:-wordpress}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
+    networks:
+      - wp
 
-volumes:
-  db_data:
+networks:
+  wp:
+    name: wp-traefik-local
+    driver: bridge
+    external: true

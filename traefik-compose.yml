@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:1.7.12
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: ./config-staging.toml
+        target: /traefik.toml
+      - type: bind
+        source: ./certs
+        target: /sslcerts
+    expose:
+      - 8080
+    ports:
+      - 80:80
+      - 443:443
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.entryPoints=https"
+      - "traefik.frontend.rule=Host:traefik.docker.localhost"
+      - "traefik.enable=true"
+    networks:
+      - wp
+
+networks:
+  wp:
+    name: wp-traefik-local
+    driver: bridge
+    external: true
