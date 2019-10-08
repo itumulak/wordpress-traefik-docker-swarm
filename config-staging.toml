@@ -10,8 +10,8 @@ defaultEntryPoints = ["http", "https"]
     address = ":443"
         [entryPoints.https.tls]
             [[entryPoints.https.tls.certificates]]
-            certFile = "/sslcerts/docker.localhost+1.pem" # Replace file name as needed
-            keyFile = "/sslcerts/docker.localhost+1-key.pem" # Replace file name as needed
+            certFile = "/sslcerts/wordpress.localhost+1.pem" # Replace file name as needed
+            keyFile = "/sslcerts/wordpress.localhost+1-key.pem" # Replace file name as needed
     [entryPoints.dashboard]
     address = ":8080"
 
@@ -20,24 +20,7 @@ endpoint = "unix://var/run/docker.sock"
 watch = true
 swarmMode = false
 exposedByDefault = false
-swarmModeRefreshSeconds = 5
-#network = "wp"
-domain = "docker.localhost"
 
 [api]
 dashboard = true
 entrypoint = "dashboard"
-
-[acme]
-email = "test@mail.com"
-storageFile = "acme.json"
-entryPoint = "https"
-acmeLogging = true
-onHostRule = true
-caServer = "https://acme-staging-v02.api.letsencrypt.org/directory" # Uncomment/remove if deployed in production
-
-[acme.httpChallenge]
-entryPoint = "http"
-
-[[acme.domains]]
-main = "*.docker.localhost"

@@ -1,6 +1,27 @@
 version: '3.7'
 
 services:
+  traefik:
+    image: traefik:1.7.12
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: ./config-staging.toml
+        target: /traefik.toml
+      - type: bind
+        source: ./certs
+        target: /sslcerts
+    ports:
+      - 80:80
+      - 443:443
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.entryPoints=https"
+      - "traefik.frontend.rule=Host:traefik.wordpress.localhost"
+      - "traefik.enable=true"
+
   db:
     image: mysql:${MYSQL_VERSION:-5.7}
     volumes:
@@ -10,34 +31,26 @@ services:
 #      - ./db:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
-      MYSQL_USER: ${MYSQL_USER:-wordpress}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
-    networks:
-      - wp
+      MYSQL_ROOT_PASSWORD: ${WP_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${WP_DB_NAME:-wordpress}
+      MYSQL_USER: ${WP_DB_USER:-wordpress}
+      MYSQL_PASSWORD: ${WP_DB_PASSWORD:-wordpress}
 
   wordpress:
-    image: wordpress:${WORDPRESS_VERSION:-latest}
+    image: wordpress:${WP_VERSION:-latest}
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
     labels:
       - "traefik.port=80"
-      - "traefik.weight=10"
-      - "traefik.frontend.rule=Host:wordpress.docker.localhost" # Modify sub-domain with your project or preferred name
+      - "traefik.frontend.rule=Host:wordpress.localhost" # Modify sub-domain with your project or preferred name
       - "traefik.frontend.entryPoints=https"
       - "traefik.enable=true"
-      - "traefik.backend=wordpress"
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-wordpress}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-wordpress}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-wordpress}
+      WORDPRESS_DB_NAME: ${WP_DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${WP_DB_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD:-wordpress}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
-    networks:
-      - wp
-
-networks:
-  wp:
-    driver: bridge
 
 volumes:
   db_data:
