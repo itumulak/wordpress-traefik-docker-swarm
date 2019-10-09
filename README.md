@@ -30,7 +30,9 @@ Run `traefik-compose.yml` first:
 ```
 docker-compose -f traefik-compose.yml up -d
 ```
-Modify the configuratioin`wordpress-compose.yml` and then run:
+Check by visting *https://traefik.docker.localhost/dashboard/*.
+
+Next is to modify any configuratioin in `wordpress-compose.yml` and then run:
 ```
 docker-compose -f wordpress-compose.yml up
 ```
