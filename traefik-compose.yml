@@ -13,19 +13,21 @@ services:
       - type: bind
         source: ./certs
         target: /sslcerts
-    expose:
-      - 8080
     ports:
       - 80:80
       - 443:443
     labels:
       - "traefik.port=8080"
       - "traefik.frontend.entryPoints=https"
-      - "traefik.frontend.rule=Host:traefik.docker.localhost"
       - "traefik.enable=true"
+      - "traefik.weight=10"
+      - "traefik.frontend.rule=Host:traefik.docker.localhost"
+      - "traefik.backend=traefik-localhost"
     networks:
       - wp
 
+# Network should be created beforehand and set as external.
+# This will used across wordpress instance.
 networks:
   wp:
     name: wp-traefik-local
