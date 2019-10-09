@@ -6,11 +6,6 @@ This template project lets you deploy WordPress enviroment both in local and pro
 ### Setup and configuration
 Check the `.env` file and modify the values as needed.
 
-Create a network beforehand:
-```
-docker network create wp-traefik-local
-```
-
 #### For local development
 First step is to generate self-signed certificates. The easiest method is to use **`mkcert`** command. Check [instructions on how to install **`mkcert`**](https://github.com/FiloSottile/mkcert#installation).
 ```
@@ -26,6 +21,11 @@ However, this method requires extra step in order for the SSL to work properly i
 
 Keep in mind, generating the certificates is a **one time process only** since website will be hosted in subdomain. Depending on your needs and structure, you can still opt to generate as many certificates as you want, just replace the default domain (docker.localhost) in `docker-compose.yml` and `config-staging.toml`. Replace the new 2 named `.pem` files in the `config-staging.toml` as well.
 
+You would then need to create a network beforehand:
+```
+docker network create wp-traefik-local
+```
+
 Run `traefik-compose.yml` first:
 ```
 docker-compose -f traefik-compose.yml up -d
@@ -36,10 +36,6 @@ Next is to modify any configuratioin in `wordpress-compose.yml` and then run:
 ```
 docker-compose -f wordpress-compose.yml up
 ```
-**Note:** 
-- Make sure the database service name is unique.
-- Subdomain name is unique.
-- The network is the same for every new wordpress instance.
 
 For creating a new wordpress instance, simply copy `wordpress-compose.yml` and `.env`.
 ```
@@ -48,6 +44,11 @@ cd $_  && \
 cp ../wordpress-traefik-docker-swarm/wordpress-compose.yml . \
 cp ../wordpress-traefik-docker-swarm/.env .
 ```
+
+**Having problems?** 
+- Make sure the database service name is unique.
+- Subdomain name is unique.
+- The network is the same for every new wordpress instance.
 
 #### For production enviroment
 Check `config-production.toml`, supply your email on line 28 and uncomment line 33 if the site is still on staging. Getting or renewing ACME certificates is done through HTTP Challenge. Uncomment line 38-40 if you want to opt for DNS challenge.
