@@ -6,6 +6,11 @@ This template project lets you deploy WordPress enviroment both in local and pro
 ### Setup and configuration
 Check the `.env` file and modify the values as needed.
 
+Create a network beforehand:
+```
+docker network create wp-traefik-local
+```
+
 #### For local development
 First step is to generate self-signed certificates. The easiest method is to use **`mkcert`** command. Check [instructions on how to install **`mkcert`**](https://github.com/FiloSottile/mkcert#installation).
 ```
@@ -25,9 +30,21 @@ Run `traefik-compose.yml` first:
 ```
 docker-compose -f traefik-compose.yml up -d
 ```
-Modify `wordpress-compose.yml` configs especially the subdomain and then run:
+Modify the configuratioin`wordpress-compose.yml` and then run:
 ```
 docker-compose -f wordpress-compose.yml up
+```
+**Note:** 
+- Make sure the database service name is unique.
+- Subdomain name is unique.
+- The network is the same for every new wordpress instance.
+
+For creating a new wordpress instance, simply copy `wordpress-compose.yml` and `.env`.
+```
+mkdir new-wp-project && \
+cd $_  && \
+cp ../wordpress-traefik-docker-swarm/wordpress-compose.yml . \
+cp ../wordpress-traefik-docker-swarm/.env .
 ```
 
 #### For production enviroment
