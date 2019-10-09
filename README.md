@@ -41,7 +41,7 @@ For creating a new wordpress instance, simply copy `wordpress-compose.yml` and `
 ```
 mkdir new-wp-project && \
 cd $_  && \
-cp ../wordpress-traefik-docker-swarm/wordpress-compose.yml . \
+cp ../wordpress-traefik-docker-swarm/wordpress-compose.yml . && \
 cp ../wordpress-traefik-docker-swarm/.env .
 ```
 
