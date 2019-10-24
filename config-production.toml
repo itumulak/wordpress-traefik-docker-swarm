@@ -26,7 +26,7 @@ entrypoint = "dashboard"
 
 [acme]
 email = "YOUR-EMAIL@MAIL"
-storageFile = "acme.json"
+storage = "acme.json"
 entryPoint = "https"
 acmeLogging = true
 onHostRule = true
