@@ -51,6 +51,16 @@ cp ../wordpress-traefik-docker-swarm/.env .
 - The network is the same for every new wordpress instance.
 
 #### For production enviroment
+Just like local setup, create an overlay network beforehand:
+```
+docker network create wp-traefik
+```
+
+This is important, change the file permission of `acme.json`.
+```
+chmod 600 acme.json
+```
+
 Check `config-production.toml`, supply your email on line 28 and uncomment line 33 if the site is still on staging. Getting or renewing ACME certificates is done through HTTP Challenge. Uncomment line 38-40 if you want to opt for DNS challenge.
 
 Keep in mind, for DNS challenge, you need to add additional environment variable. For more details and instruction, check [Traefik ACME (Let's Encrypt) Configuration](https://docs.traefik.io/v1.7/configuration/acme/#dnschallenge).
@@ -58,6 +68,10 @@ Keep in mind, for DNS challenge, you need to add additional environment variable
 Run `traefik-stack.yml` first:
 ```
 docker stack deploy --compose-file traefik-compose.yml  myapp
+```
+Check the logs if ACME are being created:
+```
+docker logs -f myapp_traefik.CONTAINER_ID
 ```
 Modify  `wordpress-stack.yml` configs as needed and then run:
 ```
