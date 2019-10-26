@@ -24,6 +24,13 @@ services:
       placement:
         constraints:
           - node.role==manager
+#      labels:
+#        - "traefik.port=8080"
+#        - "traefik.frontend.entryPoints=https"
+#        - "traefik.enable=true"
+#        - "traefik.weight=10"
+#        - "traefik.frontend.rule=Host:traefik.DOMAIN_HERE.COM"
+#        - "traefik.backend=traefik-PREFIX"
     # For DNS Challenge
     # Uncomment this section if you are opting for a DNS Challenge
     # Check providers for DNS verifications.
@@ -34,5 +41,6 @@ services:
 
 networks:
   wp:
+    name: wp-traefik
     driver: overlay
     external: true

@@ -48,14 +48,12 @@ services:
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-wordpress}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
-      # Add extra environments for DNS Challenge.
-      # DigitalOcean DNS Challenge sample.
-#      DO_AUTH_TOKEN: 'ADD_ACCESS_TOKEN_HERE'
     networks:
       - wp
 
 networks:
   wp:
+    name: wp-traefik
     driver: overlay
     external: true
 
